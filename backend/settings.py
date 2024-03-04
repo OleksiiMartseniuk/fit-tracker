@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     # Third-party apps
     # Project apps
     "apps.account",
+    "apps.workout",
 ]
 
 MIDDLEWARE = [
