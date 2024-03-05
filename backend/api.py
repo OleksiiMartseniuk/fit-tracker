@@ -10,7 +10,6 @@ api = NinjaAPI()
 def on_invalid_token(request, exc):
     return api.create_response(
         request=request,
-        # add message pydantic
         data={"detail": "Invalid token supplied"},
         status=401,
     )
