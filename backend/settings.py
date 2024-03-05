@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     # Project apps
     "apps.account",
     "apps.workout",
+    "apps.utils",
 ]
 
 MIDDLEWARE = [
