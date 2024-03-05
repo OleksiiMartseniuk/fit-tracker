@@ -13,32 +13,32 @@ from apps.workout.models import (
 
 @admin.register(WorkoutProgram)
 class WorkoutProgramAdmin(admin.ModelAdmin):
-    list_display = ("name", "publish", "owner")
+    list_display = ["name", "publish", "owner"]
 
 
 @admin.register(Exercise)
 class ExerciseAdmin(admin.ModelAdmin):
-    list_display = ("name", "difficulty", "sets_to_complete", "repetitions_per_set")
+    list_display = ["name", "difficulty", "sets_to_complete", "repetitions_per_set"]
 
 
 @admin.register(Equipment)
 class EquipmentAdmin(admin.ModelAdmin):
-    list_display = ("name", "slug")
+    list_display = ["name", "slug"]
 
 
 @admin.register(MuscleGroup)
 class MuscleGroupAdmin(admin.ModelAdmin):
-    list_display = ("name", "slug")
+    list_display = ["name", "slug"]
 
 
 @admin.register(WorkoutSession)
 class WorkoutSessionAdmin(admin.ModelAdmin):
-    list_display = ("user", "program", "date", "duration")
+    list_display = ["user", "program", "date", "duration"]
 
 
 @admin.register(ExerciseResult)
 class ExerciseResultAdmin(admin.ModelAdmin):
-    list_display = ("user", "exercise", "session")
+    list_display = ["user", "exercise", "session"]
 
 
 @admin.register(Set)
