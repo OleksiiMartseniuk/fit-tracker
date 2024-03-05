@@ -44,3 +44,14 @@ def test_logout(client_account, admin_user):
 def test_not_authenticated(client_account):
     response = client_account.get("/logout")
     assert response.status_code == 401
+
+
+def test_get_user(client_account, admin_user, get_header_authorization):
+    response = client_account.get(
+        "/user",
+        headers=get_header_authorization,
+    )
+    data = response.json()
+    assert response.status_code == 200
+    assert data["username"] == admin_user.username
+    assert data["id"] == admin_user.id

@@ -1,6 +1,6 @@
 from ninja import Router
 
-from api.v1.account.schemas import LoginSchema, TokenSchema
+from api.v1.account.schemas import LoginSchema, TokenSchema, UserSchema
 from apps.account.exceptions.auth import AuthorizationTokenServiceException
 from apps.account.services.auth import AuthorizationTokenService
 from apps.account.services.security import AuthBearer
@@ -24,3 +24,8 @@ def logout(request):
         AuthorizationTokenService().logout(request.auth)
     except AuthorizationTokenServiceException as e:
         return 401, MassageError(detail=e.message, status_code=401)
+
+
+@router.get("user", auth=AuthBearer(), response={200: UserSchema})
+def get_user(request):
+    return 200, request.auth
