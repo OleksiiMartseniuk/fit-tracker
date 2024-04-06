@@ -1,5 +1,6 @@
 from typing import Generic, TypeVar
 
+from apps.utils.convertors import ConvertorModelToDTO
 from apps.utils.exception import BaseRepositoryException
 
 ModelDTOType = TypeVar("ModelDTOType")
@@ -7,15 +8,19 @@ ModelDTOType = TypeVar("ModelDTOType")
 
 class DjangoCRUDMixin(Generic[ModelDTOType]):
     def get(self, **kwargs) -> ModelDTOType:
-        return self.dto.from_model(self.model.objects.get(**kwargs))
+        return ConvertorModelToDTO.convert(self.model.objects.get(**kwargs), self.dto)
 
     def get_all(self, **kwargs) -> list[ModelDTOType]:
         return [
-            self.dto.from_model(item) for item in self.model.objects.filter(**kwargs)
+            ConvertorModelToDTO.convert(item, self.dto)
+            for item in self.model.objects.filter(**kwargs)
         ]
 
     def create(self, **kwargs) -> ModelDTOType:
-        return self.dto.from_model(self.model.objects.create(**kwargs))
+        return ConvertorModelToDTO.convert(
+            self.model.objects.create(**kwargs),
+            self.dto,
+        )
 
     def update(
         self,
@@ -34,7 +39,7 @@ class DjangoCRUDMixin(Generic[ModelDTOType]):
             setattr(item, attr, value)
 
         item.save(update_fields=kwargs.keys()) if update_fields else item.save()
-        return self.dto.from_model(item)
+        return ConvertorModelToDTO.convert(item, self.dto)
 
     def delete(self, item_id: int) -> None:
         try:
