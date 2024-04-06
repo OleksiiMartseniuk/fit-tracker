@@ -7,14 +7,14 @@ class Workout(models.Model):
     description = models.TextField(blank=True)
     exercises = models.ManyToManyField(
         "Exercise",
-        related_name="workout_programs",
+        related_name="workouts",
         blank=True,
     )
     publish = models.BooleanField(default=True)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="workout_programs",
+        related_name="workouts",
         blank=True,
         null=True,
     )
