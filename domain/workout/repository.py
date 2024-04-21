@@ -1,14 +1,14 @@
-from apps.utils.mixins import DjangoCRUDMixin
-from apps.utils.repository import Repository
-from apps.workout.dto import (
+from apps.workout.models import Exercise, ExerciseResult, Set, Workout, WorkoutSession
+from domain.base.repository import Repository
+from domain.utils.mixins import DjangoCRUDMixin
+from domain.workout.dto import (
     ExerciseDTO,
     ExerciseResultDTO,
     SetDTO,
     WorkoutDTO,
     WorkoutSessionDTO,
 )
-from apps.workout.exceptions.workout import WorkoutItemNotFoundException
-from apps.workout.models import Exercise, ExerciseResult, Set, Workout, WorkoutSession
+from domain.workout.exceptions import WorkoutItemNotFoundException
 
 
 class WorkoutDjangoRepository(DjangoCRUDMixin[WorkoutDTO], Repository[WorkoutDTO]):

@@ -1,9 +1,9 @@
-from ninja import NinjaAPI
+from ninja_extra import NinjaExtraAPI
 
-from api.v1.account.api import router as account
-from apps.account.services.security import InvalidToken
+from api.v1.account.controller import AuthenticationController, UserController
+from apps.account.security import InvalidToken
 
-api = NinjaAPI()
+api = NinjaExtraAPI()
 
 
 @api.exception_handler(InvalidToken)
@@ -15,4 +15,7 @@ def on_invalid_token(request, exc):
     )
 
 
-api.add_router("/account/", account)
+api.register_controllers(
+    AuthenticationController,
+    UserController,
+)

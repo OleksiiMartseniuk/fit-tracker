@@ -2,7 +2,7 @@ import pytest
 from django.utils.crypto import get_random_string
 from ninja.testing import TestClient
 
-from api.v1.account.api import router as account_router
+from api.v1.account.controller import router as account_router
 from apps.account.models import Token
 
 

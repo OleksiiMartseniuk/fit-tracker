@@ -8,4 +8,4 @@ admin.site.register(User, UserAdmin)
 
 @admin.register(Token)
 class TokenAdmin(admin.ModelAdmin):
-    list_display = ["user", "created_at"]
+    list_display = ["user", "access_token", "created_at"]

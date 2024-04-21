@@ -1,14 +1,24 @@
 from typing import Generic, TypeVar
 
-from apps.utils.convertors import ConvertorModelToDTO
-from apps.utils.exception import BaseRepositoryException
+from domain.base.exception import BaseRepositoryException
+from domain.utils.convertors import ConvertorModelToDTO
 
 ModelDTOType = TypeVar("ModelDTOType")
 
 
 class DjangoCRUDMixin(Generic[ModelDTOType]):
     def get(self, **kwargs) -> ModelDTOType:
-        return ConvertorModelToDTO.convert(self.model.objects.get(**kwargs), self.dto)
+        try:
+            item = self.model.objects.get(**kwargs)
+        except self.model.DoesNotExist:
+            raise BaseRepositoryException(
+                f"Item with id {kwargs} not found for model {self.model.__name__}"
+            )
+        return ConvertorModelToDTO.convert(item, self.dto)
+
+    def get_or_none(self, **kwargs) -> ModelDTOType | None:
+        item = self.model.objects.filter(**kwargs).first()
+        return ConvertorModelToDTO.convert(item, self.dto) if item else None
 
     def get_all(self, **kwargs) -> list[ModelDTOType]:
         return [

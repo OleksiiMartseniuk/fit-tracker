@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third-party apps
     "corsheaders",
+    "ninja_extra",
     # Project apps
     "apps.account",
     "apps.workout",
@@ -145,4 +146,10 @@ LOGGING = {
             "propagate": True,
         },
     },
+}
+
+NINJA_EXTRA = {
+    "INJECTOR_MODULES": [
+        "apps.utils.injector_modules.AuthModule",
+    ]
 }

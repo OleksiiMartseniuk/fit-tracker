@@ -1,4 +1,4 @@
-from apps.utils.exception import BaseRepositoryException
+from domain.base.exception import BaseRepositoryException
 
 
 # repository exceptions
