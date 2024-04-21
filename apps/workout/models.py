@@ -2,19 +2,19 @@ from django.conf import settings
 from django.db import models
 
 
-class WorkoutProgram(models.Model):
+class Workout(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     exercises = models.ManyToManyField(
         "Exercise",
-        related_name="workout_programs",
+        related_name="workouts",
         blank=True,
     )
     publish = models.BooleanField(default=True)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="workout_programs",
+        related_name="workouts",
         blank=True,
         null=True,
     )
@@ -24,27 +24,8 @@ class WorkoutProgram(models.Model):
 
 
 class Exercise(models.Model):
-    class DifficultyChoices(models.TextChoices):
-        EASY = "easy"
-        MODERATE = "moderate"
-        DIFFICULT = "difficult"
-
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    equipment_required = models.ForeignKey(
-        "Equipment",
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
-    )
-    muscle_group = models.ForeignKey(
-        "MuscleGroup", on_delete=models.SET_NULL, blank=True, null=True
-    )
-    difficulty = models.CharField(
-        max_length=15,
-        choices=DifficultyChoices.choices,
-        default=DifficultyChoices.EASY,
-    )
     sets_to_complete = models.PositiveIntegerField(
         help_text="Number of sets to complete the exercise",
         blank=True,
@@ -70,29 +51,13 @@ class Exercise(models.Model):
         return f"[{self.id}] {self.name}"
 
 
-class Equipment(models.Model):
-    name = models.CharField(max_length=255)
-    slug = models.CharField(max_length=255, unique=True)
-
-    def __str__(self):
-        return f"[{self.id}] {self.slug}"
-
-
-class MuscleGroup(models.Model):
-    name = models.CharField(max_length=255)
-    slug = models.CharField(max_length=255, unique=True)
-
-    def __str__(self):
-        return f"[{self.id}] {self.slug}"
-
-
 class WorkoutSession(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    program = models.ForeignKey(
-        WorkoutProgram,
+    workout = models.ForeignKey(
+        Workout,
         on_delete=models.CASCADE,
     )
     date = models.DateField()
@@ -143,13 +108,6 @@ class Set(models.Model):
     )
     set_number = models.PositiveIntegerField()
     repetitions = models.PositiveIntegerField()
-    weight = models.FloatField(
-        blank=True,
-        null=True,
-    )
 
     def __str__(self):
-        return (
-            f"[{self.id}] Set {self.set_number} - "
-            f"Reps: {self.repetitions} - Weight: {self.weight}"
-        )
+        return f"[{self.id}] Set {self.set_number} - " f"Reps: {self.repetitions}"

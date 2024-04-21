@@ -13,6 +13,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 DEBUG = env.bool("DEBUG", True)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS")
 
 
 INSTALLED_APPS = [
@@ -23,6 +24,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Third-party apps
+    "corsheaders",
+    "ninja_extra",
     # Project apps
     "apps.account",
     "apps.workout",
@@ -32,6 +35,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",  # CORS
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -142,4 +146,10 @@ LOGGING = {
             "propagate": True,
         },
     },
+}
+
+NINJA_EXTRA = {
+    "INJECTOR_MODULES": [
+        "apps.utils.injector_modules.AuthModule",
+    ]
 }
