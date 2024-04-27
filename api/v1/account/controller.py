@@ -29,7 +29,8 @@ class AuthenticationController(ControllerBase):
             return (
                 status.HTTP_401_UNAUTHORIZED,
                 MassageError(
-                    detail=e.message, status_code=status.HTTP_401_UNAUTHORIZED
+                    detail=e.message,
+                    status_code=status.HTTP_401_UNAUTHORIZED,
                 ),
             )
 
