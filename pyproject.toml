@@ -7,21 +7,13 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-django = "4.2"
-django-environ = "^0.11.2"
 psycopg2 = "^2.9.9"
-pillow = "^10.2.0"
-django-ninja = "^1.1.0"
-django-cors-headers = "^4.3.1"
-django-ninja-extra = "^0.20.5"
 
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.6.2"
 isort = "^5.13.2"
-pytest-django = "^4.8.0"
 coverage = "^7.4.3"
-pytest-mock = "^3.12.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -29,8 +21,3 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.isort]
 multi_line_output = 3
-
-[tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "backend.settings"
-python_files = ["test_*.py", "*_test.py", "testing/python/*.py"]
-pythonpath = ". apps"
