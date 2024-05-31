@@ -18,4 +18,3 @@ class UserRepository:
     async def add_user(self, user_dto: UserAddDto):
         user = User(**user_dto.model_dump())
         self.session.add(user)
-        return user

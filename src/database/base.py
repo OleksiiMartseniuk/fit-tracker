@@ -7,7 +7,7 @@ settings = get_settings()
 
 engine_async = create_async_engine(
     settings.postgres_async_url,
-    echo=settings.sqlalchemy_echo,
+    echo=settings.SQLALCHEMY_ECHO,
 )
 async_session = async_sessionmaker(engine_async, expire_on_commit=False)
 
