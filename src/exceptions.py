@@ -8,3 +8,7 @@ class BaseApplicationException(Exception):
 
 class BaseServiceException(BaseApplicationException):
     pass
+
+
+class BaseRepositoryException(BaseApplicationException):
+    pass
