@@ -5,7 +5,7 @@ from sqlalchemy import engine_from_config, pool
 from alembic import context
 from src.account.models import User  # noqa
 from src.config import get_settings
-from src.database import Base
+from src.database.base import Base
 
 settings = get_settings()
 config = context.config

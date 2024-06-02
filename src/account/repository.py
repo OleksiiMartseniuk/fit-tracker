@@ -1,21 +1,15 @@
-from sqlalchemy import select
+from injector import inject
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.account.dto import UserAddDto, UserDto
+from src.account.dto import UserDTO
 from src.account.models import User
+from src.database.mixins import RepositoryCRUDMixin
 
 
-class UserRepository:
-    def __init__(self, session: AsyncSession):
-        self.session = session
+class UserRepository(RepositoryCRUDMixin[UserDTO]):
+    model = User
+    read_dto = UserDTO
 
-    async def get_user(self) -> UserDto:
-        stmt = select(User)
-        res = await self.session.execute(stmt)
-        response_orm = res.scalars().one()
-        return UserDto.model_validate(response_orm, from_attributes=True)
-
-    async def add_user(self, user_dto: UserAddDto):
-        user = User(**user_dto.model_dump())
-        self.session.add(user)
-        return user
+    @inject
+    def __init__(self, session_factory: AsyncSession):
+        self.session_factory = session_factory
