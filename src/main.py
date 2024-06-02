@@ -1,15 +1,9 @@
-from typing import Union
-
 from fastapi import FastAPI
+
+from src.api.v1.account.router import router as account_router
+from src.api.v1.auth.router import router as auth_router
 
 app = FastAPI()
 
-
-@app.get("/")
-async def read_root():
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-async def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+app.include_router(auth_router, prefix="/v1")
+app.include_router(account_router, prefix="/v1")
