@@ -3,7 +3,7 @@ from datetime import timedelta
 from fastapi import HTTPException, status
 from injector import inject
 
-from src.account.dto import Token
+from src.auth.dto import Token
 from src.auth.services.authentication import BaseAuthenticationService
 from src.auth.services.jwt import BaseJWTService
 from src.config import settings
