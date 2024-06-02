@@ -3,9 +3,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
-from src.account.dto import Token
 from src.auth.controllers import LoginController
 from src.auth.dependencies import get_login_controller
+from src.auth.dto import Token
 
 router = APIRouter(
     prefix="/auth",
