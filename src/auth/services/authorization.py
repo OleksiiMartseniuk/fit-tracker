@@ -33,7 +33,7 @@ class AuthorizationJWTService:
         if user_id is None:
             raise credentials_exception
 
-        user = await self.user_repository.get(id=user_id)
+        user = await self.user_repository.get_or_none(id=user_id)
         if user is None:
             raise credentials_exception
         return user
