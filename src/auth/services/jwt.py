@@ -10,7 +10,21 @@ from src.config import settings
 
 class BaseJWTService(ABC):
     @abstractmethod
+    def _create_token(
+        self,
+        data: dict,
+        expires_delta: timedelta,
+    ) -> str: ...
+
+    @abstractmethod
     def create_access_token(
+        self,
+        data: dict,
+        expires_delta: Union[timedelta, None] = None,
+    ) -> str: ...
+
+    @abstractmethod
+    def create_refresh_token(
         self,
         data: dict,
         expires_delta: Union[timedelta, None] = None,
@@ -21,20 +35,15 @@ class BaseJWTService(ABC):
 
 
 class JWTService(BaseJWTService):
-    DEFAULT_EXPIRE_MINUTES = 15
+    ACCESS_TOKEN_EXPIRE_MINUTES = 15
+    REFRESH_TOKEN_EXPIRE_DAYS = 7
 
-    def create_access_token(
+    def _create_token(
         self,
         data: dict,
-        expires_delta: Union[timedelta, None] = None,
+        expire: datetime,
     ) -> str:
         to_encode = data.copy()
-        if expires_delta:
-            expire = datetime.now(timezone.utc) + expires_delta
-        else:
-            expire = datetime.now(timezone.utc) + timedelta(
-                minutes=self.DEFAULT_EXPIRE_MINUTES,
-            )
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(
             payload=to_encode,
@@ -42,6 +51,32 @@ class JWTService(BaseJWTService):
             algorithm=settings.ALGORITHM,
         )
         return encoded_jwt
+
+    def create_access_token(
+        self,
+        data: dict,
+        expires_delta: Union[timedelta, None] = None,
+    ) -> str:
+        if expires_delta:
+            expire = datetime.now(timezone.utc) + expires_delta
+        else:
+            expire = datetime.now(timezone.utc) + timedelta(
+                minutes=self.ACCESS_TOKEN_EXPIRE_MINUTES,
+            )
+        return self._create_token(data=data, expire=expire)
+
+    def create_refresh_token(
+        self,
+        data: dict,
+        expires_delta: Union[timedelta, None] = None,
+    ) -> str:
+        if expires_delta:
+            expire = datetime.now(timezone.utc) + expires_delta
+        else:
+            expire = datetime.now(timezone.utc) + timedelta(
+                days=self.REFRESH_TOKEN_EXPIRE_DAYS,
+            )
+        return self._create_token(data=data, expire=expire)
 
     def decode_access_token(self, token: str) -> dict:
         try:
