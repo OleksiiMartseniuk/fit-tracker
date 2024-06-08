@@ -8,7 +8,7 @@ from src.account.dto import UserDTO
 from src.account.repository import UserRepository
 from src.auth.services.jwt import BaseJWTService
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="v1/auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="v1/auth/jwt/token")
 
 
 class AuthorizationJWTService:
