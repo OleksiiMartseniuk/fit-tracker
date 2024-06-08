@@ -14,7 +14,7 @@ router = APIRouter(
 )
 
 
-@router.post("jwt/token", response_model=Token)
+@router.post("/jwt/token", response_model=Token)
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     logen_controller: LoginController = Depends(get_login_controller),
@@ -26,7 +26,7 @@ async def login_for_access_token(
     return token
 
 
-@router.post("jwt/refresh", response_model=Token)
+@router.post("/jwt/refresh", response_model=Token)
 async def refresh_access_token(
     data_refresh_token: DataRefreshToken,
     logen_controller: LoginController = Depends(get_login_controller),
