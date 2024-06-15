@@ -4,6 +4,8 @@ from typing import Generic, Optional, TypeVar
 from sqlalchemy import delete, select, text, update
 from sqlalchemy.orm import Mapped, mapped_column
 
+from src.utils.decorator import error_handler_sqlalchemy
+
 ReadDTO = TypeVar("ReadDTO")
 
 
@@ -24,6 +26,7 @@ class RepositoryCRUDMixin(Generic[ReadDTO]):
     read_dto: pydantic model
     """
 
+    @error_handler_sqlalchemy
     async def create(self, data: dict) -> ReadDTO:
         async with self.session_factory() as session:
             obj = self.model(**data)
@@ -31,6 +34,7 @@ class RepositoryCRUDMixin(Generic[ReadDTO]):
             await session.commit()
             return self.read_dto.model_validate(obj, from_attributes=True)
 
+    @error_handler_sqlalchemy
     async def get(self, **kwargs) -> ReadDTO:
         async with self.session_factory() as session:
             stmt = select(self.model).filter_by(**kwargs)
@@ -38,6 +42,7 @@ class RepositoryCRUDMixin(Generic[ReadDTO]):
             obj = result.scalars().one()
             return self.read_dto.model_validate(obj, from_attributes=True)
 
+    @error_handler_sqlalchemy
     async def get_or_none(self, **kwargs) -> ReadDTO | None:
         async with self.session_factory() as session:
             stmt = select(self.model).filter_by(**kwargs)
@@ -47,12 +52,14 @@ class RepositoryCRUDMixin(Generic[ReadDTO]):
                 return None
             return self.read_dto.model_validate(obj, from_attributes=True)
 
+    @error_handler_sqlalchemy
     async def update(self, data: dict, **kwargs) -> None:
         async with self.session_factory() as session:
             stmt = update(self.model).filter_by(**kwargs).values(data)
             await session.execute(stmt)
             await session.commit()
 
+    @error_handler_sqlalchemy
     async def delete(self, **kwargs) -> None:
         async with self.session_factory() as session:
             stmt = delete(self.model).filter_by(**kwargs)
