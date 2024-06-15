@@ -4,6 +4,7 @@ from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 from src.account.models import User  # noqa
+from src.auth.models import Token  # noqa
 from src.config import get_settings
 from src.database.base import Base
 
