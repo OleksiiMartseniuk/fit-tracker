@@ -16,5 +16,6 @@ class UserDTO(BaseModel):
     hashed_password: str
     email: Optional[EmailStr]
     is_active: bool
+    is_superuser: bool
     created_at: datetime
     updated_at: Optional[datetime]

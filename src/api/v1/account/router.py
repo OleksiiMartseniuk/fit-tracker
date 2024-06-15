@@ -12,7 +12,11 @@ router = APIRouter(
 )
 
 
-@router.post("/user", response_model=UserSchema, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/user",
+    status_code=status.HTTP_201_CREATED,
+    response_model=UserSchema,
+)
 async def create_user(
     data: UserAddDTO,
     user_controller: UserController = Depends(get_user_controller),
@@ -21,7 +25,10 @@ async def create_user(
     return user.model_dump(exclude={"hashed_password"})
 
 
-@router.get("/user", response_model=UserSchema)
+@router.get(
+    "/user",
+    response_model=UserSchema,
+)
 async def get_user(
     current_user: UserDTO = Depends(get_active_user),
     user_controller: UserController = Depends(get_user_controller),
@@ -30,7 +37,10 @@ async def get_user(
     return user.model_dump(exclude={"hashed_password"})
 
 
-@router.patch("/user", response_model=UserSchema)
+@router.patch(
+    "/user",
+    response_model=UserSchema,
+)
 async def update_user(
     user_data: UpdateUserSchema,
     current_user: UserDTO = Depends(get_active_user),
@@ -43,7 +53,10 @@ async def update_user(
     return user.model_dump(exclude={"hashed_password"})
 
 
-@router.delete("/user", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/user",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
 async def delete_user(
     current_user: UserDTO = Depends(get_active_user),
     user_controller: UserController = Depends(get_user_controller),

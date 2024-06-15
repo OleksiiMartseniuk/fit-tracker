@@ -6,6 +6,7 @@ from injector import inject
 
 from src.account.dto import UserDTO
 from src.account.repository import UserRepository
+from src.auth.repository import TokenRepository
 from src.auth.services.jwt import BaseJWTService
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="v1/auth/jwt/token")
@@ -48,3 +49,25 @@ class GetActiveUser(AuthorizationJWTService):
 
     async def __call__(self, token: Annotated[str, Depends(oauth2_scheme)]) -> UserDTO:
         return await self.get_active_user(token=token)
+
+
+class AuthorizationTokenService:
+    @inject
+    def __init__(
+        self,
+        token_repository: TokenRepository,
+        user_repository: UserRepository,
+    ):
+        self.token_repository = token_repository
+        self.user_repository = user_repository
+
+    async def authorize(self, token: str) -> UserDTO | None:
+        token = await self.token_repository.get_or_none(token=token)
+        if token is None:
+            return None
+
+        user = await self.user_repository.get_or_none(id=token.user_id)
+        if user is None:
+            return None
+
+        return user

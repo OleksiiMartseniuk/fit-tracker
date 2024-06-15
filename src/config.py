@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int
     REFRESH_TOKEN_EXPIRE_DAYS: int
+    # Admin settings
+    ADMIN_SECRET_KEY: str
 
     model_config = SettingsConfigDict(env_file=BASE_DIR / ".env")
 
@@ -37,3 +39,34 @@ def get_settings():
 
 
 settings = get_settings()
+
+LOGGING_CONFIG = {
+    "version": 1,
+    "disable_existing_loggers": True,
+    "formatters": {
+        "standard": {"format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"},
+    },
+    "handlers": {
+        "default": {
+            "level": "INFO",
+            "formatter": "standard",
+            "class": "logging.StreamHandler",
+            "stream": "ext://sys.stdout",  # Default is stderr
+        },
+    },
+    "loggers": {
+        "": {  # root logger
+            "level": "INFO",
+            "handlers": ["default"],
+            "propagate": False,
+        },
+        "uvicorn.error": {
+            "level": "DEBUG",
+            "handlers": ["default"],
+        },
+        "uvicorn.access": {
+            "level": "DEBUG",
+            "handlers": ["default"],
+        },
+    },
+}
