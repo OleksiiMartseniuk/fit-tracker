@@ -4,7 +4,7 @@ from fastapi import HTTPException, status
 from injector import inject
 
 from src.account.repository import UserRepository
-from src.auth.dto import Token
+from src.auth.dto import JWTTokenDTO
 from src.auth.services.authentication import BaseAuthenticationService
 from src.auth.services.jwt import BaseJWTService
 from src.config import settings
@@ -22,7 +22,7 @@ class LoginController:
         self.jwt_service = jwt_service
         self.user_repository = user_repository
 
-    async def create_token(self, user_id: int) -> Token:
+    async def create_token(self, user_id: int) -> JWTTokenDTO:
         access_token = self.jwt_service.create_access_token(
             data={"user_id": user_id},
             expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
@@ -32,7 +32,7 @@ class LoginController:
             expires_delta=timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS),
         )
 
-        return Token(
+        return JWTTokenDTO(
             access_token=access_token,
             refresh_token=refresh_token,
             token_type="Bearer",
@@ -42,7 +42,7 @@ class LoginController:
         self,
         username: str,
         password: str,
-    ) -> Token:
+    ) -> JWTTokenDTO:
         user = await self.authentication_service.authenticate_user(
             username=username,
             password=password,
@@ -55,7 +55,7 @@ class LoginController:
             )
         return await self.create_token(user_id=user.id)
 
-    async def refresh_access_token(self, refresh_token: str) -> Token:
+    async def refresh_access_token(self, refresh_token: str) -> JWTTokenDTO:
         payload = self.jwt_service.decode_access_token(token=refresh_token)
         user_id = payload.get("_user_id")
         if user_id is None:
