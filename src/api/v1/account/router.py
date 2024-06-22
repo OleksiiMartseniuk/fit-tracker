@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status
 from src.account.controllers import UserController
 from src.account.dependencies import get_user_controller
 from src.account.dto import UserAddDTO, UserDTO
-from src.api.v1.account.schemas import UpdateUserSchema, UserSchema
+from src.api.v1.account.schemas import CreateUserSchema, UpdateUserSchema, UserSchema
 from src.auth.dependencies import get_active_user
 
 router = APIRouter(
@@ -18,10 +18,10 @@ router = APIRouter(
     response_model=UserSchema,
 )
 async def create_user(
-    data: UserAddDTO,
+    data: CreateUserSchema,
     user_controller: UserController = Depends(get_user_controller),
 ):
-    user = await user_controller.create_user(data=data)
+    user = await user_controller.create_user(data=UserAddDTO(**data.model_dump()))
     return user.model_dump(exclude={"hashed_password"})
 
 

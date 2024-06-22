@@ -15,7 +15,10 @@ class User(TimestampMixin, Base):
         String(30),
         unique=True,
     )
-    email: Mapped[Optional[str]] = mapped_column(String(255))
+    email: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        unique=True,
+    )
     hashed_password: Mapped[str] = mapped_column(String(255))
     is_active: Mapped[bool] = mapped_column(default=True)
     is_superuser: Mapped[bool] = mapped_column(default=False)
