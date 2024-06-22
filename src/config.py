@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int
     # Admin settings
     ADMIN_SECRET_KEY: str
+    # CORS
+    CORS_ALLOWED_HOSTS: list[str]
 
     model_config = SettingsConfigDict(env_file=BASE_DIR / ".env")
 
