@@ -41,3 +41,14 @@ class UserService(BaseUserService):
 
         user = await self.user_repository.create(data=data_dict)
         return user
+
+    async def create_superuser(self, data: UserAddDTO) -> UserDTO:
+        hashed_password = self.hash_password_service.get_password_hash(
+            password=data.password,
+        )
+        data_dict = data.model_dump(exclude={"password"})
+        data_dict["hashed_password"] = hashed_password
+        data_dict["is_superuser"] = True
+
+        user = await self.user_repository.create(data=data_dict)
+        return user
